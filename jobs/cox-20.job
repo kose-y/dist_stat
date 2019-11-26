@@ -1,0 +1,12 @@
+#!/bin/sh
+#$ -cwd
+#$ -N cox
+#$ -pe mpi 40
+#$ -j y
+date
+module load mpi/openmpi-x86_64
+source /shared/conda/etc/profile.d/conda.sh
+export PATH=/shared/conda/bin:$PATH
+export LD_LIBRARY_PATH=/shared/conda/lib:$LD_LIBRARY_PATH
+export MKL_NUM_THREADS=18
+mpirun -np 40 python /shared/dist-stat-compute/src/test_cox.py --double --nosubnormal --rows=200000 --cols=100000 --iter=1000 --lambda=1e-8 --datnormest=72000

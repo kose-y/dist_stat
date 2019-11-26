@@ -1,0 +1,14 @@
+#!/bin/sh
+#$ -cwd
+#$ -N pet
+#$ -pe mpi 10
+#$ -j y
+date
+module load mpi/openmpi-x86_64
+source /shared/conda/etc/profile.d/conda.sh
+export PATH=/shared/conda/bin:$PATH
+export LD_LIBRARY_PATH=/shared/conda/lib:$LD_LIBRARY_PATH
+export MKL_NUM_THREADS=18
+mpirun -np 10 python /shared/dist-stat-compute/torch/test_pet.py --double --nosubnormal --mu=0.01 --iter=10000  --data=/shared/dist-stat-compute/data/pet_100_180.npz
+mpirun -np 10 python /shared/dist-stat-compute/torch/test_pet_l1.py --double --nosubnormal --rho=0.01 --iter=10000 --sparse --data=/shared/dist-stat-compute/data/pet_100_180.npz
+mpirun -np 10 python /shared/dist-stat-compute/torch/test_pet_l1.py --double --nosubnormal --rho=0.01 --iter=10000  --data=/shared/dist-stat-compute/data/pet_100_180.npz
