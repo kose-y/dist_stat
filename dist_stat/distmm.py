@@ -120,10 +120,12 @@ def _distmm_fatthin_byrow(fat, thin, reverse=False, tmpout=None, out=None):
             assert tmpout.size() == torch.Size([thin.shape[1], thin.shape[0]])
             torch.t(tmpout).view(-1)
 
-    split_thin = list(torch.split(tmpout, thin.sizes, dim=(0 if not reverse else 1)))
+    split_thin_pre = torch.split(tmpout, thin.sizes, dim=(0 if not reverse else 1))
+    split_thin = list(split_thin_pre) if not reverse else [x.t() for x in split_thin_pre]
     #print(rank, thin.chunk)
     synchronize()
-    dist.all_gather(split_thin, thin.chunk)
+    chunk = thin.chunk if not reverse else thin.chunk.t()
+    dist.all_gather(split_thin, chunk)
 
     # compute
     if out is None:
@@ -184,10 +186,11 @@ def distmm_thinthin_outer(matA, matB, tmpout=None, out=None):
     else:
         assert tmpout.size() == torch.Size([r,q])
         torch.t(tmpout).view(-1)
-    split_tmpout = list(torch.split(tmpout, matB.sizes, dim=1))
+    split_tmpout_pre = torch.split(tmpout, matB.sizes, dim=1)
+    split_tmpout = [x.t() for x in split_tmpout_pre]
     #print(split_tmpout)
     synchronize()
-    dist.all_gather(split_tmpout, matB.chunk)
+    dist.all_gather(split_tmpout, matB.chunk.t())
 
     # compute
     if out is None:

@@ -372,7 +372,7 @@ class THDistMat():
         
         size_member_tensor = torch.LongTensor([chunk.shape[0 if byrow else 1]])
         sizes_tensor = torch.LongTensor(size)
-        size_tensor_list = torch.split(sizes_tensor, 1)
+        size_tensor_list = list(torch.split(sizes_tensor, 1))
         dist.all_gather(size_tensor_list, size_member_tensor)
         shape = ([torch.sum(sizes_tensor),chunk.shape[1]] if byrow else 
                     [chunk.shape[0], torch.sum(sizes_tensor)])
