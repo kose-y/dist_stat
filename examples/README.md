@@ -72,5 +72,7 @@ optional arguments:
                      identical dataset for different settings.
 ```
 
+### On Sun Grid Engine
+See job scripts in [jobs](../jobs).
 
 
