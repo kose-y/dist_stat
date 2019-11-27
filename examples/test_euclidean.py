@@ -8,8 +8,8 @@ from dist_stat import distmat
 from dist_stat import distmm
 import argparse
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
 from dist_stat.euclidean_distance import euclidean_distance_DistMat, euclidean_distance_tensor
+num_gpu = torch.cuda.device_count()
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description="nmf testing")
@@ -19,11 +19,7 @@ if __name__=='__main__':
                         help='use this flag for double precision. otherwise single precision is used.')
     args = parser.parse_args()
     if args.with_gpu:
-        divisor = size//4
-        if divisor==0:
-            torch.cuda.set_device(rank)
-        else:
-            torch.cuda.set_device(rank//divisor)
+        torch.cuda.set_device(rank % num_gpu)
         if args.double:
             TType=torch.cuda.DoubleTensor
         else:

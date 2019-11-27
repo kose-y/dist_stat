@@ -8,5 +8,5 @@ module load mpi/openmpi-x86_64
 source /shared/conda/etc/profile.d/conda.sh
 export PATH=/shared/conda/bin:$PATH
 export LD_LIBRARY_PATH=/shared/conda/lib:$LD_LIBRARY_PATH
-export MKL_NUM_THREADS=18
+export MKL_NUM_THREADS=18 # 18 threads per process
 mpirun -np 4 python /shared/dist_stat/examples/mcpi-mpi-pytorch.py

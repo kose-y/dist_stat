@@ -8,22 +8,31 @@ dist.init_process_group('mpi')
 
 from dist_stat import distmat
 from dist_stat.distmm import *
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
+num_gpu = torch.cuda.device_count()
 rank = dist.get_rank()
 size = dist.get_world_size()
 
 
 if __name__=='__main__':
-    parser = argparse.ArgumentParser(description="test matrix distributing")
+    parser = argparse.ArgumentParser(description="test distributed matrix multiplication")
     parser.add_argument('--gpu', dest='with_gpu', action='store_const', const=True, default=False, 
                         help='whether to use gpu')
+    parser.add_argument('--double', dest='double', action='store_const', const=True, default=False,
+                        help='use this flag for double precision. otherwise single precision is used.')
+    parser.add_argument('--offset', dest='offset', action='store', default=0,
+                        help='gpu id offset')
     args = parser.parse_args()
     if args.with_gpu:
-        divisor = size//4
-        torch.cuda.set_device(rank//divisor)
-        TType=torch.cuda.FloatTensor
+        torch.cuda.set_device(rank % num_gpu)
+        if args.double:
+            TType=torch.cuda.DoubleTensor
+        else:
+            TType=torch.cuda.FloatTensor
     else:
-        TType=torch.DoubleTensor
+        if args.double:
+            TType=torch.DoubleTensor
+        else:
+            TType=torch.FloatTensor
 
     p = 12; q = 8; r = 2
     if rank==0:

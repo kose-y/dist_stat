@@ -14,14 +14,7 @@ import argparse
 import os
 from pandas_plink import read_plink1_bin
 import dask.array as da
-if 'CUDA_VISIBLE_DEVICES' in os.environ.keys():
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
-    num_gpu=4
-else:
-    num_gpu=8
-#import pyximport
-#pyximport.install()
-#import floatlib
+num_gpu = torch.cuda.device_count()
 
 from numpy import genfromtxt
 
@@ -51,11 +44,7 @@ if __name__=='__main__':
     parser.add_argument('--quicknorm', dest='quicknorm', action='store_const', const=True, default=False)
     args = parser.parse_args()
     if args.with_gpu:
-        divisor = size //num_gpu
-        if divisor ==0:
-            torch.cuda.set_device(rank)
-        else:
-            torch.cuda.set_device(rank//divisor)
+        torch.cuda.set_device(rank % num_gpu)
         if args.double:
             TType=torch.cuda.DoubleTensor
         else:

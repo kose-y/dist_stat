@@ -7,7 +7,7 @@ setup(name="dist_stat",
     author_email="syko0507@snu.ac.kr",
     url="https://github.com/kose-y/dist_stat",
     packages=['dist_stat'],
-    install_requires=['numpy>=1.13','scipy>=1.0.0', 'h5py>=2.8.0'],
+    install_requires=['numpy>=1.13','scipy>=1.0.0'],
     extras_require={
         'torch': ['torch>=0.4.0'],
     },

@@ -9,11 +9,7 @@ from dist_stat import distmm
 from dist_stat import nmf_pg_ridge as nmf
 import argparse
 import os
-if 'CUDA_VISIBLE_DEVICES' in os.environ.keys():
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
-    num_gpu=4
-else:
-    num_gpu=8
+num_gpu = torch.cuda.device_count()
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description="nmf testing")
@@ -39,11 +35,7 @@ if __name__=='__main__':
                         help='samples are generated from the CPU of root: for obtaining identical dataset for different settings.')
     args = parser.parse_args()
     if args.with_gpu:
-        divisor = size//num_gpu
-        if divisor==0:
-            torch.cuda.set_device(rank)
-        else:
-            torch.cuda.set_device(rank//divisor)
+        torch.cuda.set_device(rank % num_gpu)
         if args.double:
             TType=torch.cuda.DoubleTensor
         else:
