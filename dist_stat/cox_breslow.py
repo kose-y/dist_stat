@@ -2,15 +2,15 @@ import torch
 import torch.distributed as dist
 import time
 from math import inf
-from . import distmat
+import distmat
 import os
-from .utils import breslow_ind
+from utils import breslow_ind
 """
 l1-regularized cox regression
 """
 
 class COX():
-    def __init__(self, data, delta, lambd, time=None, seed=16962, sigma='power', TType=torch.DoubleTensor):
+    def __init__(self, data, delta, lambd, nonsnps=0, time=None, seed=16962, sigma='power', TType=torch.DoubleTensor):
         """
         data: a Tensor.
         delta: indicator for right censoring (1 if uncensored, 0 if censored)
@@ -25,6 +25,7 @@ class COX():
 
         self.n, self.p = data.shape
         n, p = self.n, self.p
+        print(n, p)
         
         self.data = data.type(TType)
         self.delta = delta.type(TType)
@@ -46,9 +47,11 @@ class COX():
             self.sigma = sigma
 
 
+
         print(self.sigma)
         self.lambd = lambd
-        self.soft_threshold = torch.nn.Softshrink(lambd)
+        self.nonsnps = nonsnps
+        self.soft_threshold_ftn = torch.nn.Softshrink(lambd)
 
         if time is None:
             time = -torch.arange(0,n).view(-1,1)
@@ -61,6 +64,14 @@ class COX():
         #r_dist = distmat.dist_data(r_local, TType=self.TType)
         self.pi_ind = (time_dist - time_local.t()>= 0).type(TType)
         #print(self.rank, self.pi_ind.chunk[10,8:13])
+    def soft_threshold(self, x):
+        if self.rank != self.size - 1:
+            return self.soft_threshold_ftn(x)
+        else:
+            x[:-self.nonsnps] = self.soft_threshold_ftn(x[:-self.nonsnps])
+            return x
+        
+
 
     def l1(self):
         absdata = distmat.abs(self.data)
@@ -140,6 +151,7 @@ class COX():
         #print("%20.9e" % (pd.sum()))
         #print("%20.9e" % ((pd**2).sum()))
         dmpd = self.delta_dist - pd
+
         ###print("%20.9e" % (dmpd.max()), file=self.devnull)
         #print("%20.9e" % (dmpd.sum()))
         #print("%20.9e" % ((dmpd**2).max()))
