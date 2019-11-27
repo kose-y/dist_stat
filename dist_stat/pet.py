@@ -56,7 +56,6 @@ class PET():
         el = distmat.mm(self.emat, self.lambd) 
         gl = distmat.mm(self.G, self.lambd)
         z = self.emat * self.y * self.lambd.t()/(el + self.eps)
-        print(z.chunk.shape)
         # update b
         b = self.mu * (self.N*self.lambd + gl) -1
         # update c
@@ -98,7 +97,6 @@ class PET():
                 print('-'*80)
         t0 = time.time()
         t_start = t0
-        print(self.get_objective())
 
         for i in range(maxiter):
             self.lambd_prev.copy_(self.lambd)

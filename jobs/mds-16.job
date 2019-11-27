@@ -9,4 +9,4 @@ source /shared/conda/etc/profile.d/conda.sh
 export PATH=/shared/conda/bin:$PATH
 export LD_LIBRARY_PATH=/shared/conda/lib:$LD_LIBRARY_PATH
 export MKL_NUM_THREADS=18
-mpirun -np 32 python /shared/dist-stat-compute/src/test_mds.py --double --nosubnormal --datapoints=$1 --origdims=$2 --targetdims=$3 --iter=1000 
+mpirun -np 32 python /shared/dist_stat/examples/test_mds.py --double --nosubnormal --datapoints=$1 --origdims=$2 --targetdims=$3 --iter=1000 

@@ -142,4 +142,4 @@ if __name__=='__main__':
     counts = TType(datafile['counts']) # put everywhere
 
     pet = PET_L1(counts, e_dist, D_dist, sig=1/3, tau=1/3, rho=float(args.rho), TType=TType)
-    pet.run(check_obj=False, tol=float(args.tol), check_interval=100, maxiter=int(args.iter))
+    pet.run(check_obj=True, tol=float(args.tol), check_interval=100, maxiter=int(args.iter))

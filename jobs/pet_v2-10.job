@@ -10,6 +10,6 @@ source /shared/conda/etc/profile.d/conda.sh
 export PATH=/shared/conda/bin:$PATH
 export LD_LIBRARY_PATH=/shared/conda/lib:$LD_LIBRARY_PATH
 export MKL_NUM_THREADS=18
-#mpirun -np 20 python /shared/dist-stat-compute/src/test_pet_sparse.py --double --nosubnormal --mu=0.01 --iter=1000  --data=$1
-mpirun -np 20 python /shared/dist-stat-compute/src/test_pet_l1_sparse.py --double --nosubnormal --rho=0.01 --iter=1000 --sparse --data=$1
-mpirun -np 20 python /shared/dist-stat-compute/src/test_pet_l1_sparse.py --double --nosubnormal --rho=0.01 --iter=1000  --data=$1
+#mpirun -np 20 python /shared/dist_stat/examples/test_pet_sparse.py --double --nosubnormal --mu=0.01 --iter=1000  --data=$1
+mpirun -np 20 python /shared/dist_stat/examples/test_pet_l1_sparse.py --double --nosubnormal --rho=0.01 --iter=1000 --sparse --data=$1
+mpirun -np 20 python /shared/dist_stat/examples/test_pet_l1_sparse.py --double --nosubnormal --rho=0.01 --iter=1000  --data=$1
