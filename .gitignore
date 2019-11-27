@@ -3,6 +3,5 @@ __pycache__/
 build/
 dist/
 dist_stat.egg-info/
-data/*
 *.mat
 
