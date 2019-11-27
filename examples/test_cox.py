@@ -7,7 +7,7 @@ size = dist.get_world_size()
 from dist_stat import distmat
 from dist_stat import distmm
 
-from dist_stat import cox_cumsum as cox
+from dist_stat import cox
 import argparse
 import os
 if 'CUDA_VISIBLE_DEVICES' in os.environ.keys():

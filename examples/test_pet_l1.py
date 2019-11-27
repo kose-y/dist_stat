@@ -44,7 +44,7 @@ if __name__=='__main__':
                         help='penalty parameter')
     parser.add_argument('--offset', dest='offset', action='store', default=0, 
                         help='gpu id offset')
-    parser.add_argument('--data', dest='data', action='store', default='../data/pet_100_180.npz', 
+    parser.add_argument('--data', dest='data', action='store', default='../data/pet_gen_v2_100_120.npz', 
                         help='data file (.npz)')
     parser.add_argument('--sparse', dest='sparse', action='store_const', default=False, const=True, 
                         help='use sparse data matrix')

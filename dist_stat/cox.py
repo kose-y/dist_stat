@@ -9,7 +9,7 @@ l1-regularized cox regression
 """
 
 class COX():
-    def __init__(self, data, delta, lambd, seed=16962, time=None, sigma='power', TType=torch.DoubleTensor):
+    def __init__(self, data, delta, lambd, seed=16962, sigma='power', TType=torch.DoubleTensor):
         """
         data: a Tensor.
         delta: indicator for right censoring (1 if uncensored, 0 if censored)
@@ -27,7 +27,7 @@ class COX():
         
         self.data = data.type(TType)
         self.delta = delta.type(TType)
-        #self.delta_dist = distmat.dist_data(self.delta, TType=TType)
+        self.delta_dist = distmat.dist_data(self.delta, TType=TType)
         self.prev_obj = -inf
 
         self.beta = distmat.dist_data(torch.zeros((p,1)).type(TType), TType=TType)
@@ -48,20 +48,9 @@ class COX():
         print(self.sigma)
         self.lambd = lambd
         self.soft_threshold = torch.nn.Softshrink(lambd)
-
-        # UPDATE 190521: pi_ind is nxn matrix, let's just keep it local.
-
-        if time is None:
-            time = -torch.arange(0, n).view(-1, 1)
-
-
-        time = time.reshape(-1, 1)
-        self.pi_ind = (time.t() - time >= 0).type(TType)
-
-        #r_local = torch.arange(0, n).view(-1, 1).type(TType)
-        #r_dist = distmat.dist_data(r_local, TType=self.TType)
-        #self.pi_ind = ((- r_dist) + r_local.t()>= 0).type(TType)
-
+        r_local = torch.arange(0, n).view(-1, 1).type(TType)
+        r_dist = distmat.dist_data(r_local, TType=self.TType)
+        self.pi_ind = ((- r_dist) + r_local.t()>= 0).type(TType)
         #print(self.rank, self.pi_ind.chunk[10,8:13])
 
     def l1(self):
@@ -113,21 +102,20 @@ class COX():
     def update(self):
         Xbeta = distmat.mm(self.data, self.beta)
         w = Xbeta.exp()
-        W = distmat.mm(self.pi_ind, w)
-        # W = w.cumsum(0)
+        W = w.cumsum(0)
         dist.barrier()
 
-        pi = (w/W.t()) * self.pi_ind.t()  
+        w_dist = distmat.dist_data(w, TType=self.TType)
 
+        pi = (w_dist/W.t()) * self.pi_ind     
         pd  = distmat.mm(pi, self.delta)
-        dmpd = self.delta - pd
+        dmpd = self.delta_dist - pd
         grad = distmat.mm(self.datat, dmpd)
-        
         self.beta = (self.beta + grad * self.sigma).apply(self.soft_threshold)
 
     def get_objective(self):
         expXbeta = (distmat.mm(self.data, self.beta)).exp()
-        return distmat.mm(self.delta.t(), (distmat.mm(self.data, self.beta) - (distmat.mm(self.pi_ind, expXbeta)).log())) - self.lambd * self.beta.abs().sum()
+        return distmat.mm(self.delta.t(), (distmat.mm(self.data, self.beta) - (expXbeta.cumsum(0)).log())) - self.lambd * self.beta.abs().sum()
 
     def check_convergence(self,tol, verbose=True, check_obj=False, check_interval=1):
         obj = None
