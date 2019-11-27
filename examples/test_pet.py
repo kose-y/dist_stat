@@ -42,7 +42,7 @@ if __name__=='__main__':
                         help='gpu id offset')
     parser.add_argument('--data', dest='data', action='store', default='../data/pet_gen_v2_100_120.npz',
                         help='data file (.npz)')
-    parser.add_argument('--sparse', dest='sparse', action='store_const', default=False, const=True, 
+    parser.add_argument('--sparse', dest='sparse', action='store_const', default=True, const=True, 
                         help='use sparse data matrix')
     parser.add_argument('--iter', dest='iter', action='store', default=1000, 
                         help='max iter')
