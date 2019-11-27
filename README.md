@@ -23,7 +23,7 @@ MPI is a de facto standard communication directives for tightly-coupled high-per
 We tested our code using OpenMPI v1.10-4.0. For CUDA-aware support on OpenMPI, it should be compiled from source, following [these](https://www.open-mpi.org/faq/?category=buildcuda) directions.
 
 #### PyTorch (compiled from source)
-For PyTorch to support MPI, it should be compiled [from source](https://github.com/pytorch/pytorch#from-source). We tested our code on PyTorch versions v0.4-1.3.
+For PyTorch to support MPI, it should be compiled [from source](https://github.com/pytorch/pytorch#from-source). We tested our code on PyTorch versions 0.4-1.3.
 
 ### Installing the package
 One can run the following commands to install the package after installing the prerequisites:
