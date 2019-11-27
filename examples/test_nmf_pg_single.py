@@ -45,4 +45,4 @@ if __name__=='__main__':
     m = TType(int(args.m), int(args.n)).uniform_()
     
     nmf_driver = nmf.NMF(m, int(args.r), TType)
-    nmf_driver.run(int(args.iter), tol=float(args.tol),check_interval=100, check_obj=True)
+    nmf_driver.run(int(args.iter), tol=float(args.tol), check_interval=100, check_obj=True)

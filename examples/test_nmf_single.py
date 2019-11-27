@@ -11,6 +11,16 @@ if __name__=='__main__':
                         help='use this flag for double precision. otherwise single precision is used.')
     parser.add_argument('--nosubnormal', dest='nosubnormal', action='store_const', const=True, default=False, 
                         help='use this flag to avoid subnormal number.')
+    parser.add_argument('--tol', dest='tol', action='store', default=0, 
+                        help='error tolerance')
+    parser.add_argument('--rows', dest='m', action='store', default=10000,
+                        help='number of rows')
+    parser.add_argument('--cols', dest='n', action='store', default=10000,
+                        help='number of cols')
+    parser.add_argument('--r', dest='r', action='store', default=20,
+                        help='internal dim')
+    parser.add_argument('--iter', dest='iter', action='store', default=10000,
+                        help='max iter')
     args = parser.parse_args()
     if args.with_gpu:
         if args.double:
@@ -27,7 +37,7 @@ if __name__=='__main__':
     rank = 0
     torch.manual_seed(95376+rank)
 
-    m = torch.DoubleTensor(16384, 16384).uniform_()
+    m = torch.DoubleTensor(int(args.m), int(args.n)).uniform_()
     
-    nmf_driver = nmf.NMF(m, 10, TType)
-    nmf_driver.run(100000, tol=1e-8,check_interval=10, check_obj=True)
+    nmf_driver = nmf.NMF(m, int(args.r), TType)
+    nmf_driver.run(int(args.iter), tol=float(args.tol),check_interval=100, check_obj=True)

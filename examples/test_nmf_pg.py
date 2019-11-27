@@ -32,6 +32,8 @@ if __name__=='__main__':
                         help='number of cols')
     parser.add_argument('--r', dest='r', action='store', default=20,
                         help='internal dim')
+    parser.add_argument('--set_from_master', dest='set_from_master', action='store_true',
+                        help='samples are generated from the CPU of root: for obtaining identical dataset for different settings.')
     args = parser.parse_args()
     if args.with_gpu:
         divisor = size//num_gpu
@@ -53,6 +55,6 @@ if __name__=='__main__':
 
     torch.manual_seed(95376+rank)
 
-    m = distmat.distgen_uniform(int(args.m), int(args.n), TType=TType, set_from_master=True)
-    nmf_driver = nmf.NMF(m, int(args.r), TType, init_from_master=True)
+    m = distmat.distgen_uniform(int(args.m), int(args.n), TType=TType, set_from_master=args.set_from_master)
+    nmf_driver = nmf.NMF(m, int(args.r), TType, init_from_master=args.set_from_master)
     nmf_driver.run(10000, tol=float(args.tol), check_interval=100, check_obj=True)

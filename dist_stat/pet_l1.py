@@ -59,7 +59,7 @@ class PET_L1():
         self.lambd = self.lambd.apply(torch.clamp, min=0.0)
 
         lambd_tilde = 2*self.lambd - self.lambd_prev
-        el = distmat.mm(self.E, self.lambd_tilde) 
+        el = distmat.mm(self.E, lambd_tilde) 
         self.z = self.z + sig * el
         tmp = (self.z**2 + 4*sig * self.y).sqrt()
         self.z = 0.5 * (self.z - tmp)

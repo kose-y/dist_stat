@@ -1,6 +1,6 @@
 import torch
 import torch.distributed as dist
-import distmat
+from . import distmat
 from .distmat import THDistMat, distgen_uniform, distgen_base, linf_diff, l2_diff
 from .distmm import distmm_fatthin, distmm_thinthin_inner, distmm_db_d, distmm_thinthin_outer
 import time

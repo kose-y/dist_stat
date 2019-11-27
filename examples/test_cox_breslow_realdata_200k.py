@@ -5,11 +5,11 @@ dist.init_process_group('mpi')
 rank = dist.get_rank()
 size = dist.get_world_size()
 
-import distmat
-from distmat import THDistMat
-import distmm
+from dist_stat import distmat
+from dist_stat.distmat import THDistMat
+from dist_stat import distmm
 
-import cox_breslow as cox
+from dist_stat import cox_breslow as cox
 import argparse
 import os
 from pandas_plink import read_plink1_bin
@@ -34,7 +34,7 @@ if __name__=='__main__':
     parser.add_argument('--normalize', dest='normalize', action='store_const', const=True, default=False, 
                         help='normalize the dataset')
     parser.add_argument('--tol', dest='tol', action='store', default=0.0, 
-                        help='relative tolerence')
+                        help='relative tolerance')
     parser.add_argument('--lambda', dest='lambd', action='store', default=0.0001, 
                         help='penalty parameter')
     parser.add_argument('--iter', dest='iter', action='store', default=10000, 

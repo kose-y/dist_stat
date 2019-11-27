@@ -13,6 +13,14 @@ if __name__=='__main__':
                         help='use this flag for double precision. otherwise single precision is used.')
     parser.add_argument('--nosubnormal', dest='nosubnormal', action='store_const', const=True, default=False, 
                         help='use this flag to avoid subnormal number.')
+    parser.add_argument('--tol', dest='tol', action='store', default=0, 
+                        help='error tolerance')
+    parser.add_argument('--offset', dest='offset', action='store', default=0, 
+                        help='gpu id offset')
+    parser.add_argument('--datapoints', dest='datapoints', action='store', default=10000)
+    parser.add_argument('--origdims', dest='origdims', action='store', default=10000)
+    parser.add_argument('--iter', dest='iter', action='store', default=10000)
+    parser.add_argument('--targetdims', dest='targetdims', action='store', default=20)
     args = parser.parse_args()
     if args.with_gpu:
         if args.double:
@@ -29,8 +37,8 @@ if __name__=='__main__':
     rank = 0
     torch.manual_seed(95376+rank)
 
-    m = torch.DoubleTensor(10000, 1000).uniform_().type(TType)
+    m = torch.DoubleTensor(int(args.datapoints), int(args.origdims)).uniform_().type(TType)
     
-    mds_driver = mds.MDS(m, 100, TType=TType)
-    mds_driver.run(100000, tol=0,check_interval=1, check_obj=True)
+    mds_driver = mds.MDS(m, int(args.targetdims), TType=TType)
+    mds_driver.run(int(args.iter), tol=float(args.tol),check_interval=100, check_obj=True)
 

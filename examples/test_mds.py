@@ -32,6 +32,8 @@ if __name__=='__main__':
     parser.add_argument('--origdims', dest='origdims', action='store', default=10000)
     parser.add_argument('--iter', dest='iter', action='store', default=10000)
     parser.add_argument('--targetdims', dest='targetdims', action='store', default=20)
+    parser.add_argument('--set_from_master', dest='set_from_master', action='store_true', 
+                        help='samples are generated from the CPU of root: for obtaining identical dataset for different settings.')
     args = parser.parse_args()
     if args.with_gpu:
         divisor = size//num_gpu
@@ -55,8 +57,8 @@ if __name__=='__main__':
 
     torch.manual_seed(95376+rank)
 
-    m = distmat.distgen_normal(int(args.datapoints), int(args.origdims), set_from_master=True)
+    m = distmat.distgen_normal(int(args.datapoints), int(args.origdims), set_from_master=args.set_from_master)
     
-    mds_driver = mds.MDS(m, int(args.targetdims), TType=TType, init_from_master=True)
+    mds_driver = mds.MDS(m, int(args.targetdims), TType=TType, init_from_master=args.set_from_master)
     mds_driver.run(int(args.iter), tol=float(args.tol),check_interval=100, check_obj=True)
 

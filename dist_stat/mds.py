@@ -105,7 +105,6 @@ class MDS():
 
         t0 = time.time()
         t_start = t0
-        print(self.get_objective())
 
         for i in range(maxiter):
             self.theta_prev.copy_(self.theta)

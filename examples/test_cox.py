@@ -27,7 +27,7 @@ if __name__=='__main__':
     parser.add_argument('--double', dest='double', action='store_const', const=True, default=False, 
                         help='use this flag for double precision. otherwise single precision is used.')
     parser.add_argument('--tol', dest='tol', action='store', default=0.0, 
-                        help='relative tolerence')
+                        help='relative tolerance')
     parser.add_argument('--lambda', dest='lambd', action='store', default=0.0001, 
                         help='penalty parameter')
     parser.add_argument('--iter', dest='iter', action='store', default=10000, 
@@ -40,6 +40,8 @@ if __name__=='__main__':
     parser.add_argument('--cols', dest='cols', action='store', default=10000)
     parser.add_argument('--datnormest', dest='datnormest', action='store', default=None)
     parser.add_argument('--quicknorm', dest='quicknorm', action='store_const', const=True, default=False)
+    parser.add_argument('--set_from_master', dest='set_from_master', action='store_true', 
+                        help='samples are generated from the CPU of root: for obtaining identical dataset for different settings.')
     args = parser.parse_args()
     if args.with_gpu:
         divisor = size //num_gpu
@@ -63,7 +65,7 @@ if __name__=='__main__':
     seed=95376
     torch.manual_seed(seed)
     n = int(args.cols); p = int(args.rows)
-    X = distmat.distgen_normal(p, n, TType=TType, set_from_master=True)
+    X = distmat.distgen_normal(p, n, TType=TType, set_from_master=args.set_from_master)
     torch.manual_seed(seed+100)
     delta = torch.multinomial(torch.tensor([1., 1.]), n, replacement=True).float().view(-1, 1).type(TType)
     if args.datnormest:
@@ -73,4 +75,4 @@ if __name__=='__main__':
     else:
         cox_driver = cox.COX(X.t(), delta, float(args.lambd), seed=seed+200, TType=TType, sigma='power')  
     cox_driver.run(int(args.iter), tol=float(args.tol),check_interval=int(args.step), check_obj=True)
-    print((cox_driver.beta == 0).chunk.sum())
+    print("number of zeros:", (cox_driver.beta == 0).chunk.sum())

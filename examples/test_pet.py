@@ -4,8 +4,18 @@ import os
 from dist_stat.pet_utils import *
 from dist_stat.pet import PET
 import numpy as np
+from scipy.sparse import coo_matrix, csr_matrix
 from scipy import sparse
 
+def coo_to_sparsetensor(spm, TType=torch.DoubleTensor):
+    typename = torch.typename(TType).split('.')[-1]
+    TType_cuda = TType.is_cuda
+    densemodule = torch.cuda if TType_cuda else torch
+    spmodule = torch.cuda.sparse if TType_cuda else torch.sparse
+    TType_sp = getattr(spmodule, typename)
+    i = densemodule.LongTensor(np.vstack([spm.row, spm.col]))
+    v = TType(spm.data)
+    return TType_sp(i, v, spm.shape)
 
 import torch.distributed as dist
 dist.init_process_group('mpi')
@@ -36,6 +46,8 @@ if __name__=='__main__':
                         help='gpu id offset')
     parser.add_argument('--data', dest='data', action='store', default='../data/pet_100_180.npz',
                         help='data file (.npz)')
+    parser.add_argument('--sparse', dest='sparse', action='store_const', default=False, const=True, 
+                        help='use sparse data matrix')
     parser.add_argument('--iter', dest='iter', action='store', default=1000, 
                         help='max iter')
     args = parser.parse_args()
@@ -56,6 +68,8 @@ if __name__=='__main__':
             TType=torch.FloatTensor
     if args.nosubnormal:
         torch.set_flush_denormal(True)
+        #floatlib.set_ftz()
+        #floatlib.set_daz()
 
     rank = dist.get_rank()
     size = dist.get_world_size()
@@ -67,23 +81,42 @@ if __name__=='__main__':
 
     n_x = datafile['n_x']
     n_t = datafile['n_t']
-    e = torch.Tensor(datafile['e']).type(TType)
-
-    p = e.shape[1]
-    d = e.shape[0]
-
-    p_chunk_size = p//size
-
-    e_chunk = e[:, (rank*p_chunk_size):((rank+1)*p_chunk_size)]
-    e_dist = THDistMat.from_chunks(e_chunk, force_bycol=True)
-    print(e_dist.byrow)
-    print(e_dist.shape)
 
     TType_name = torch.typename(TType).split('.')[-1]
     TType_sp   = getattr(torch.sparse, TType_name)
     if args.with_gpu:
         TType_sp   = getattr(torch.cuda.sparse, TType_name)
-    print(TType_sp)
+    #print(TType_sp)
+
+    #e = torch.Tensor(datafile['e']).type(TType)
+    e_indices = datafile["e_indices"]
+    e_values = datafile["e_values"]
+
+    p = n_x**2
+    d = n_t * (n_t - 1) // 2
+    p_chunk_size = p//size
+
+    e_coo = coo_matrix((e_values, (e_indices[0,:], e_indices[1,:])), shape=(d, p))
+    e_csc = e_coo.tocsc()
+    e_csc_chunk = e_csc[:, (rank*p_chunk_size):((rank+1)*p_chunk_size)]
+    e_coo_chunk = e_csc_chunk.tocoo()
+    e_values = TType(e_coo_chunk.data)
+    e_rows = torch.LongTensor(e_coo_chunk.row)
+    e_cols = torch.LongTensor(e_coo_chunk.col)
+    if e_values.is_cuda:
+        e_rows = e_rows.cuda()
+        e_cols = e_cols.cuda()
+    e_indices = torch.stack([e_rows, e_cols], dim=1).t()
+    e_shape = e_coo_chunk.shape
+    e_size = torch.Size([int(e_shape[0]), int(e_shape[1])])
+    e_chunk = TType_sp(e_indices, e_values, e_size).t()
+
+    if args.sparse:
+        e_dist = THDistMat.from_chunks(e_chunk).t()
+    else:
+        e_chunk = e_chunk.to_dense().t()
+        e_dist = THDistMat.from_chunks(e_chunk, force_bycol=True)
+    #print(e_dist.shape)
 
 
     G_coo = sparse.coo_matrix((datafile['G_values'], 

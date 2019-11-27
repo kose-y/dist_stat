@@ -1,0 +1,12 @@
+#!/bin/sh
+#$ -cwd
+#$ -N mcpi
+#$ -pe mpi 4
+#$ -j y
+date
+module load mpi/openmpi-x86_64
+source /shared/conda/etc/profile.d/conda.sh
+export PATH=/shared/conda/bin:$PATH
+export LD_LIBRARY_PATH=/shared/conda/lib:$LD_LIBRARY_PATH
+export MKL_NUM_THREADS=18
+mpirun -np 4 python /shared/dist-stat-compute/src/mcpi-mpi-pytorch.py
