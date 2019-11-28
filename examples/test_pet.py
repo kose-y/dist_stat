@@ -27,7 +27,7 @@ from dist_stat.distmat import THDistMat
 num_gpu = torch.cuda.device_count()
 
 if __name__=='__main__':
-    parser = argparse.ArgumentParser(description="nmf testing")
+    parser = argparse.ArgumentParser(description="PET with squared difference penalty")
     parser.add_argument('--gpu', dest='with_gpu', action='store_const', const=True, default=False, 
                         help='whether to use gpu')
     parser.add_argument('--double', dest='double', action='store_const', const=True, default=False, 
@@ -42,8 +42,8 @@ if __name__=='__main__':
                         help='gpu id offset')
     parser.add_argument('--data', dest='data', action='store', default='../data/pet_gen_v2_100_120.npz',
                         help='data file (.npz)')
-    parser.add_argument('--sparse', dest='sparse', action='store_const', default=True, const=True, 
-                        help='use sparse data matrix')
+    parser.add_argument('--dense', dest='dense', action='store_const', default=False, const=True, 
+                        help='use dense data matrix')
     parser.add_argument('--iter', dest='iter', action='store', default=1000, 
                         help='max iter')
     args = parser.parse_args()
@@ -103,12 +103,11 @@ if __name__=='__main__':
     e_size = torch.Size([int(e_shape[0]), int(e_shape[1])])
     e_chunk = TType_sp(e_indices, e_values, e_size).t()
 
-    if args.sparse:
+    if not args.dense:
         e_dist = THDistMat.from_chunks(e_chunk).t()
     else:
         e_chunk = e_chunk.to_dense().t()
         e_dist = THDistMat.from_chunks(e_chunk, force_bycol=True)
-    #print(e_dist.shape)
 
 
     G_coo = sparse.coo_matrix((datafile['G_values'], 

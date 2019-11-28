@@ -14,7 +14,7 @@ size = dist.get_world_size()
 
 
 if __name__=='__main__':
-    parser = argparse.ArgumentParser(description="test distributed matrix multiplication")
+    parser = argparse.ArgumentParser(description="Distributed matrix multiplication")
     parser.add_argument('--gpu', dest='with_gpu', action='store_const', const=True, default=False, 
                         help='whether to use gpu')
     parser.add_argument('--double', dest='double', action='store_const', const=True, default=False,

@@ -12,7 +12,7 @@ import os
 num_gpu = torch.cuda.device_count()
 
 if __name__=='__main__':
-    parser = argparse.ArgumentParser(description="nmf testing")
+    parser = argparse.ArgumentParser(description="NMF with APG, nonzero ridge penalty")
     parser.add_argument('--gpu', dest='with_gpu', action='store_true', 
                         help='whether to use gpu')
     parser.add_argument('--double', dest='double', action='store_true',

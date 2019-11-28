@@ -12,7 +12,7 @@ from dist_stat import mds
 num_gpu = torch.cuda.device_count()
 
 if __name__=='__main__':
-    parser = argparse.ArgumentParser(description="nmf testing")
+    parser = argparse.ArgumentParser(description="MDS algorithm")
     parser.add_argument('--gpu', dest='with_gpu', action='store_const', const=True, default=False, 
                         help='whether to use gpu')
     parser.add_argument('--double', dest='double', action='store_const', const=True, default=False, 

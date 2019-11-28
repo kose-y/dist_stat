@@ -13,7 +13,7 @@ size = dist.get_world_size()
 num_gpu = torch.cuda.device_count()
 
 if __name__=='__main__':
-    parser = argparse.ArgumentParser(description="test distributed matrix")
+    parser = argparse.ArgumentParser(description="Examples of distributed matrix operations")
     parser.add_argument('--gpu', dest='with_gpu', action='store_const', const=True, default=False,
                         help='whether to use gpu')
     parser.add_argument('--double', dest='double', action='store_const', const=True, default=False,
