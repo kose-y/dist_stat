@@ -3,7 +3,7 @@
 Job scripts for submission to the Sun Grid Engine.
 The number right before the extension `.job` denotes the number of nodes to be used by the job, when running on the virtual cluster created by AWS ParallelCluster as in [our configuration](../parallelcluster/config).
 
-Example commands to submit the job:
+Example commands to submit the jobs:
 ```sh 
 qsub mcpi-2.job
 ```

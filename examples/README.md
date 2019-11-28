@@ -71,6 +71,7 @@ optional arguments:
   --set_from_master  samples are generated from the CPU of root: for obtaining
                      identical dataset for different settings.
 ```
+The default values for the arguments are those used for the smallest sized experiments for the single-node multi-GPU setup.
 
 ### On Sun Grid Engine
 See job scripts in [jobs](../jobs).
