@@ -51,11 +51,7 @@ python test_nmf.py --help
 ```
 prints out the list of options used in the multiplicative algorithm for NMF:
 ```
-usage: test_nmf.py [-h] [--gpu] [--double] [--nosubnormal] [--tol TOL]
-                   [--rows M] [--cols N] [--r R] [--iter ITER]
-                   [--set_from_master]
-
-nmf testing
+NMF with multiplicative algorithm
 
 optional arguments:
   -h, --help         show this help message and exit
