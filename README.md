@@ -19,8 +19,8 @@ For multi-GPU support, the following are required:
 - [NVIDIA cuDNN](https://developer.nvidia.com/cudnn) v7 or above.
 
 #### (CUDA-aware) MPI
-MPI is a de facto standard communication directives for tightly-coupled high-performance computing. Any MPI implementations that run in PyTorch is okay, such as Open MPI or MPICH. However, if multi-GPU support is desired, the MPI should be ["CUDA-aware"](https://devblogs.nvidia.com/introduction-cuda-aware-mpi/).
-We tested our code using OpenMPI v1.10-4.0. For CUDA-aware support on OpenMPI, it should be compiled from source, following [these](https://www.open-mpi.org/faq/?category=buildcuda) directions.
+MPI is a de facto standard communication directives for tightly-coupled high-performance computing. Any MPI implementations that run in PyTorch is okay, such as Open MPI or MPICH. However, if multi-GPU support is desired, the MPI should be ["CUDA-aware"](https://devblogs.nvidia.com/introduction-cuda-aware-mpi/). For CUDA-aware support on OpenMPI, it should be compiled from source, following [these](https://www.open-mpi.org/faq/?category=buildcuda) directions.
+We tested our code using OpenMPI v1.10-4.0. 
 
 #### PyTorch (compiled from source)
 For PyTorch to support MPI, it should be compiled [from source](https://github.com/pytorch/pytorch#from-source). We tested our code on PyTorch versions 0.4-1.3.
