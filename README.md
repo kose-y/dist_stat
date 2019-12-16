@@ -39,6 +39,9 @@ See [Examples](./examples).
 ## Deployment on the AWS
 How to deploy the virtual cluster on the AWS using [AWS ParallelCluster](https://docs.aws.amazon.com/parallelcluster/) is discussed in Appendix C of our paper below. We used up to 20 `c5.18xlarge` instances on AWS EC2. The job scripts to submit the jobs to the Sun Grid Engine are given in [Jobs](./jobs).
 
+## Acknowledgement
+This work was supported by Amazon Web Services Credits for Research.
+
 ## Citation
 ```
 Ko S, Zhou H, Zhou J, and Won J-H (2019+). High-Performance Statistical Computing in the Computing Environment of the 2020s. []
