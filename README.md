@@ -43,6 +43,5 @@ How to deploy the virtual cluster on the AWS using [AWS ParallelCluster](https:/
 This work was supported by Amazon Web Services Credits for Research.
 
 ## Citation
-```
-Ko S, Zhou H, Zhou J, and Won J-H (2019+). High-Performance Statistical Computing in the Computing Environment of the 2020s. []
-```
+
+Ko S, Zhou H, Zhou J, and Won J-H (2019+). High-Performance Statistical Computing in the Computing Environment of the 2020s. Submitted to _Statistical Science_.
