@@ -40,7 +40,7 @@ See [Examples](./examples).
 How to deploy the virtual cluster on the AWS using [AWS ParallelCluster](https://docs.aws.amazon.com/parallelcluster/) is discussed in Appendix C of our paper below. We used up to 20 `c5.18xlarge` instances on AWS EC2. The job scripts to submit the jobs to the Sun Grid Engine are given in [Jobs](./jobs).
 
 ## Acknowledgement
-This work was supported by Amazon Web Services Credits for Research.
+This work was supported by [AWS Cloud Credits for Research](https://aws.amazon.com/research-credits/).
 
 ## Citation
 
