@@ -44,4 +44,4 @@ This work was supported by [AWS Cloud Credits for Research](https://aws.amazon.c
 
 ## Citation
 
-Ko S, Zhou H, Zhou J, and Won J-H (2019+). High-Performance Statistical Computing in the Computing Environment of the 2020s. [arXiv:2001.01916](https://arxiv.org/abs/2001.01916). Submitted to _Statistical Science_.
+Ko S, Zhou H, Zhou J, and Won J-H (2019+). High-Performance Statistical Computing in the Computing Environment of the 2020s. [arXiv:2001.01916](https://arxiv.org/abs/2001.01916).
