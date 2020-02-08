@@ -159,6 +159,7 @@ class THDistMat():
                     synchronize()
                     dist.recv(buf, i)
                     new_chunk += buf
+                dist.barrier()
         elif not self.byrow and dim==1:
             buf = torch.zeros_like(new_chunk[:, -1])
             for i in range(self.size-1):
@@ -169,12 +170,9 @@ class THDistMat():
                     synchronize()
                     dist.recv(buf, i)
                     new_chunk += buf
+                dist.barrier()
         return THDistMat(self.shape, self.sizes, new_chunk, self.byrow)
         
-
-      
-        
-
     # some in-place methods
     def zero_(self):
         return self.apply_inplace(lambda x: x.zero_())
