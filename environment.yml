@@ -1,0 +1,17 @@
+name: dist-stat-tutorial
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.7
+  - pip
+  - pytorch=1.1
+  - torchvision
+  - opencv
+  - matplotlib
+  - jupyterlab
+  - librosa
+  - nb_conda_kernels
+  - pip:
+    - torchtext
+    - torchviz
