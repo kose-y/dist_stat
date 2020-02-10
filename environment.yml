@@ -7,10 +7,10 @@ dependencies:
   - pip
   - pytorch-cpu=1.1
   - torchvision-cpu
-  - opencv
-  - matplotlib
+#  - opencv
+#  - matplotlib
   - jupyterlab
-  - librosa
+#  - librosa
   - nb_conda_kernels
 #  - pip:
 #    - torchtext
