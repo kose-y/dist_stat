@@ -5,8 +5,9 @@ channels:
 dependencies:
   - python=3.7
   - pip
-  - pytorch-cpu=1.4
-  - torchvision-cpu
+  - pytorch=1.4
+  - torchvision
+  - cpuonly
 #  - opencv
 #  - matplotlib
   - jupyterlab
