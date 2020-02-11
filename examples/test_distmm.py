@@ -34,7 +34,7 @@ if __name__=='__main__':
         else:
             TType=torch.FloatTensor
 
-    p = 12; q = 8; r = 2
+    p = 4; q = 8; r = 2
     if rank==0:
         fat   = TType(p, q).normal_()
         thin1 = TType(q, r).normal_()

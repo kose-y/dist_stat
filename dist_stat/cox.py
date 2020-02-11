@@ -44,8 +44,8 @@ class COX():
         else:
             self.sigma = sigma
 
-
-        print(self.sigma)
+        if self.rank == 0:
+            print("step size: ", self.sigma)
         self.lambd = lambd
         self.soft_threshold = torch.nn.Softshrink(lambd)
         r_local = torch.arange(0, n).view(-1, 1).type(TType)
@@ -62,7 +62,6 @@ class COX():
     def spectral_upper_bdd(self):
         absdata = distmat.abs(self.data)
         r = (absdata.sum(dim=0).max()*absdata.sum(dim=1).max()).sqrt()
-        print(r)
         return r
         
    
@@ -93,8 +92,7 @@ class COX():
                 if rank==0:
                     print('iteration {}'.format(i))
         if rank==0:
-            print('done computing max singular value')
-        print(s)
+            print('done computing max singular value: ', s)
         return s
 
 
@@ -161,7 +159,7 @@ class COX():
                 if converged: break
                 t0 = t1
 
-        if verbose:
+        if verbose and self.rank == 0:
             print('-'*80) 
             print("Completed. total time: {}".format(time.time()-t_start))
 
