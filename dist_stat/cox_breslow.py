@@ -215,7 +215,8 @@ class COX():
                 if converged: break
                 t0 = t1
 
-        if verbose:
+        if verbose and self.rank == 0:
             print('-'*80) 
             print("Completed. total time: {}".format(time.time()-t_start))
+        return self.beta
 

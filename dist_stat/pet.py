@@ -121,3 +121,4 @@ class PET():
             if rank==0:
                 print('-'*80)
                 print("Completed. total time: {}".format(time.time()-t_start))
+        return self.lambd
