@@ -64,4 +64,6 @@ if __name__=='__main__':
     else:
         cox_driver = cox.COX(X.t(), delta, float(args.lambd), seed=seed+200, TType=TType, sigma='power')  
     cox_driver.run(int(args.iter), tol=float(args.tol),check_interval=int(args.step), check_obj=True)
-    print("number of zeros:", (cox_driver.beta == 0).type(torch.int64).sum())
+    zeros = (cox_driver.beta == 0).type(torch.int64).sum()
+    if rank == 0:
+        print("number of zeros:", zeros)
