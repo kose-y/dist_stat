@@ -2,9 +2,9 @@ import torch
 import torch.distributed as dist
 import time
 from math import inf
-import distmat
+from . import distmat
 import os
-from utils import breslow_ind
+from .utils import breslow_ind
 """
 l1-regularized cox regression
 """
@@ -25,7 +25,6 @@ class COX():
 
         self.n, self.p = data.shape
         n, p = self.n, self.p
-        print(n, p)
         
         self.data = data.type(TType)
         self.delta = delta.type(TType)
@@ -55,9 +54,10 @@ class COX():
 
         if time is None:
             time = -torch.arange(0,n).view(-1,1)
+        else:
+            time = time.view(-1, 1)
 
         self.breslow_ind = torch.tensor(breslow_ind(time.cpu().numpy())).to(dtype=torch.int64, device=self.beta.chunk.device)
-
         time_local = time.reshape(-1, 1).type(TType)
         time_dist = distmat.dist_data(time, TType=self.TType)
         #r_local = torch.arange(0, n).view(-1, 1).type(TType)
