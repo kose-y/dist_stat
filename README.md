@@ -1,6 +1,7 @@
 # dist_stat 
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kose-y/dist_stat/master) __← Click for tutorial__
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kose-y/dist_stat/master?filepath=pytorch-dist-workshop.ipynb)
+ __← Click for tutorial__
 
 
 This repository contains the Python package `dist_stat` for distributed computation based on `distributed` submodule of PyTorch. The package includes the distributed matrix data structure (`distmat`) and operations on it. In addition, the following applications of the data structure are also included:
