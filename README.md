@@ -27,7 +27,7 @@ MPI is a de facto standard communication directives for tightly-coupled high-per
 We tested our code using OpenMPI v1.10-4.0. 
 
 #### PyTorch (compiled from source)
-For PyTorch to support MPI, it should be compiled [from source](https://github.com/pytorch/pytorch#from-source). We tested our code on PyTorch versions 0.4-1.3.
+For PyTorch to support MPI, it should be compiled [from source](https://github.com/pytorch/pytorch#from-source). We tested our code on PyTorch versions 0.4-1.4.
 
 ### Installing the package
 One can run the following commands to install the package after installing the prerequisites:
