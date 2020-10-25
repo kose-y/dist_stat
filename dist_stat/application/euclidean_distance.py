@@ -1,7 +1,7 @@
 import torch
 import torch.distributed as dist
-from . import distmat
-from .distmat import THDistMat
+from .. import distmat
+from ..distmat import THDistMat
 import time
 def euclidean_distance_tensor(dataA, dataB, out=None, splits=1):
     v1  = torch.sum(dataA**2, 1).view(-1,  1)

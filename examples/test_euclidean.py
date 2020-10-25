@@ -8,7 +8,7 @@ from dist_stat import distmat
 from dist_stat import distmm
 import argparse
 import os
-from dist_stat.euclidean_distance import euclidean_distance_DistMat, euclidean_distance_tensor
+from dist_stat.application.euclidean_distance import euclidean_distance_DistMat, euclidean_distance_tensor
 num_gpu = torch.cuda.device_count()
 
 if __name__=='__main__':

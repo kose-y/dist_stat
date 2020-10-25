@@ -9,7 +9,7 @@ from dist_stat import distmat
 from dist_stat.distmat import THDistMat
 from dist_stat import distmm
 
-from dist_stat import cox_breslow as cox
+from dist_stat.application import cox_breslow as cox
 import argparse
 import os
 from pandas_plink import read_plink1_bin

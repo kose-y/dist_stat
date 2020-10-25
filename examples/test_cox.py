@@ -7,7 +7,7 @@ size = dist.get_world_size()
 from dist_stat import distmat
 from dist_stat import distmm
 
-from dist_stat import cox
+from dist_stat.application.cox import COX
 import argparse
 import os
 num_gpu = torch.cuda.device_count()
@@ -58,11 +58,11 @@ if __name__=='__main__':
     torch.manual_seed(seed+100)
     delta = torch.multinomial(torch.tensor([1., 1.]), n, replacement=True).float().view(-1, 1).type(TType)
     if args.datnormest:
-        cox_driver = cox.COX(X.t(), delta, float(args.lambd), seed=seed+200, TType=TType, sigma=1.0/(2*float(args.datnormest)**2))
+        cox_driver = COX(X.t(), delta, float(args.lambd), seed=seed+200, TType=TType, sigma=1.0/(2*float(args.datnormest)**2))
     elif args.quicknorm:
-        cox_driver = cox.COX(X.t(), delta, float(args.lambd), seed=seed+200, TType=TType, sigma='quicknorm')
+        cox_driver = COX(X.t(), delta, float(args.lambd), seed=seed+200, TType=TType, sigma='quicknorm')
     else:
-        cox_driver = cox.COX(X.t(), delta, float(args.lambd), seed=seed+200, TType=TType, sigma='power')  
+        cox_driver = COX(X.t(), delta, float(args.lambd), seed=seed+200, TType=TType, sigma='power')  
     cox_driver.run(int(args.iter), tol=float(args.tol),check_interval=int(args.step), check_obj=True)
     zeros = (cox_driver.beta == 0).type(torch.int64).sum()
     if rank == 0:

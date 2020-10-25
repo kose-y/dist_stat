@@ -1,8 +1,8 @@
 import torch
 import argparse
 import os
-from dist_stat.pet_utils import *
-from dist_stat.pet_l1 import PET_L1
+from dist_stat.application.pet_utils import *
+from dist_stat.application.pet_l1 import PET_L1
 import numpy as np
 from scipy.sparse import coo_matrix, csr_matrix
 from scipy import sparse

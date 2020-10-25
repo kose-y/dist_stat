@@ -1,8 +1,8 @@
 import torch
 import torch.distributed as dist
-from .import distmat
-from .distmat import THDistMat, distgen_uniform, distgen_base, linf_diff, l2_diff
-from .distmm import distmm_fatthin, distmm_thinthin_inner, distmm_db_d, distmm_thinthin_outer
+from .. import distmat
+from ..distmat import THDistMat, distgen_uniform, distgen_base, linf_diff, l2_diff
+from ..distmm import distmm_fatthin, distmm_thinthin_inner, distmm_db_d, distmm_thinthin_outer
 import time
 from math import inf
 """
@@ -10,7 +10,7 @@ NMF, without intermediate storages
 """
 
 class NMF():
-    def __init__(self, data, r, TType=torch.DoubleTensor, init_from_master=False):
+    def __init__(self, data, r, eps=1e-3, TType=torch.DoubleTensor, init_from_master=False):
         """
         data: a THDistMat, byrow.
         r: a small integer
@@ -33,21 +33,25 @@ class NMF():
         self.data = data
         #self.data_double = data.type(torch.DoubleTensor)
         self.prev_obj = inf
+        self.eps=eps
 
     def update_V(self):
-        XWt =  distmat.mm(self.data, self.W.t())
-        WWt =  distmat.mm(self.W, self.W.t())
+        Wt = self.W.t()
+        XWt =  distmat.mm(self.data, Wt)
+        WWt =  distmat.mm(self.W, Wt)
         VWWt = distmat.mm(self.V, WWt)
-        self.V = self.V.mul_(XWt).div_(VWWt)
+        sigma_k = 1.0/(2*((WWt**2).sum() + self.eps * self.r).sqrt())
+        self.V = (self.V * (1.0 - sigma_k * self.eps) - (VWWt - XWt)*sigma_k).apply(torch.clamp, min=0)
     def update_W(self):
         VtX  = distmat.mm(self.V.t(), self.data, out_sizes=self.W.sizes) 
         VtV  = distmat.mm(self.V.t(), self.V)
         VtVW = distmat.mm(VtV, self.W)
-        self.W = self.W.mul_(VtX).div_(VtVW)
+        tau_k = 1.0/(2*((VtV**2).sum() + self.eps * self.r).sqrt())
+        self.W = (self.W * (1.0 - tau_k * self.eps) - (VtVW-VtX)*tau_k).apply(torch.clamp, min=0)
     def get_objective(self):
         outer = distmat.mm(self.V, self.W)
         #val =  l2_diff(self.data, outer)**2
-        val = ((self.data - outer)**2).all_reduce_sum()
+        val = ((self.data - outer)**2).all_reduce_sum() + self.eps * ((self.V**2).all_reduce_sum() + (self.W**2).all_reduce_sum())
         return val
     def check_convergence(self,tol, verbose=True, check_obj=False, check_interval=1):
         rank = dist.get_rank()
@@ -104,4 +108,3 @@ class NMF():
                 print('-'*80) 
                 print("Completed. total time: {}".format(time.time()-t_start))
         return self.V, self.W
-

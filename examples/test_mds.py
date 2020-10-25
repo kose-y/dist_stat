@@ -8,7 +8,7 @@ rank = dist.get_rank()
 size = dist.get_world_size()
 
 from dist_stat import distmat
-from dist_stat import mds
+from dist_stat.application.mds import MDS
 num_gpu = torch.cuda.device_count()
 
 if __name__=='__main__':
@@ -50,6 +50,6 @@ if __name__=='__main__':
 
     m = distmat.distgen_normal(int(args.datapoints), int(args.origdims), set_from_master=args.set_from_master)
     
-    mds_driver = mds.MDS(m, int(args.targetdims), TType=TType, init_from_master=args.set_from_master)
+    mds_driver = MDS(m, int(args.targetdims), TType=TType, init_from_master=args.set_from_master)
     mds_driver.run(int(args.iter), tol=float(args.tol),check_interval=100, check_obj=True)
 

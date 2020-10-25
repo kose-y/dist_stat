@@ -6,7 +6,7 @@ size = dist.get_world_size()
 
 from dist_stat import distmat
 from dist_stat import distmm
-from dist_stat import nmf_pg_ridge as nmf
+from dist_stat.application.nmf_pg_ridge import NMF
 import argparse
 import os
 num_gpu = torch.cuda.device_count()
@@ -51,5 +51,5 @@ if __name__=='__main__':
     torch.manual_seed(95376+rank)
 
     m = distmat.distgen_uniform(int(args.m), int(args.n), TType=TType, set_from_master=args.set_from_master)
-    nmf_driver = nmf.NMF(m, int(args.r), float(args.eps), TType, init_from_master=args.set_from_master)
+    nmf_driver = NMF(m, int(args.r), float(args.eps), TType, init_from_master=args.set_from_master)
     nmf_driver.run(int(args.iter), tol=float(args.tol), check_interval=100, check_obj=True)

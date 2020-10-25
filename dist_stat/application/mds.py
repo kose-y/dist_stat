@@ -1,7 +1,7 @@
 import torch
 import torch.distributed as dist
-from . import distmat
-from .distmat import THDistMat, distgen_uniform, distgen_base, linf_diff, l2_diff
+from .. import distmat
+from ..distmat import THDistMat, distgen_uniform, distgen_base, linf_diff, l2_diff
 import time
 from .euclidean_distance import euclidean_distance_DistMat
 from math import inf
