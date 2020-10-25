@@ -1,6 +1,7 @@
 # dist_stat 
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kose-y/dist_stat/master) __← Click for tutorial__
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kose-y/dist_stat/master?filepath=pytorch-dist-workshop.ipynb)
+ __← Click for tutorial__
 
 
 This repository contains the Python package `dist_stat` for distributed computation based on `distributed` submodule of PyTorch. The package includes the distributed matrix data structure (`distmat`) and operations on it. In addition, the following applications of the data structure are also included:
@@ -26,7 +27,7 @@ MPI is a de facto standard communication directives for tightly-coupled high-per
 We tested our code using OpenMPI v1.10-4.0. 
 
 #### PyTorch (compiled from source)
-For PyTorch to support MPI, it should be compiled [from source](https://github.com/pytorch/pytorch#from-source). We tested our code on PyTorch versions 0.4-1.3.
+For PyTorch to support MPI, it should be compiled [from source](https://github.com/pytorch/pytorch#from-source). We tested our code on PyTorch versions 0.4-1.4.
 
 ### Installing the package
 One can run the following commands to install the package after installing the prerequisites:
